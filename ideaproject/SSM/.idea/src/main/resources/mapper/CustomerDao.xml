@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace=".dao.CustomerDao">
+
+    <resultMap id="BaseResultMap" type=".entity.Customer">
+        <!--@Table customer-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="points" column="points" jdbcType="INTEGER"/>
+        <result property="level" column="level" jdbcType="INTEGER"/>
+        <result property="petsnumber" column="petsnumber" jdbcType="INTEGER"/>
+        <result property="money" column="money" jdbcType="OTHER"/>
+        <result property="creattime" column="creattime" jdbcType="TIMESTAMP"/>
+        <result property="creatby" column="creatby" jdbcType="VARCHAR"/>
+        <result property="updatetime" column="updatetime" jdbcType="TIMESTAMP"/>
+        <result property="updateby" column="updateby" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          id, name, mobile, address, points, level, petsnumber, money, creattime, creatby, updatetime, updateby
+        from mydatabase.customer
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          id, name, mobile, address, points, level, petsnumber, money, creattime, creatby, updatetime, updateby
+        from mydatabase.customer
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          id, name, mobile, address, points, level, petsnumber, money, creattime, creatby, updatetime, updateby
+        from mydatabase.customer
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="mobile != null and mobile != ''">
+                and mobile = #{mobile}
+            </if>
+            <if test="address != null and address != ''">
+                and address = #{address}
+            </if>
+            <if test="points != null">
+                and points = #{points}
+            </if>
+            <if test="level != null">
+                and level = #{level}
+            </if>
+            <if test="petsnumber != null">
+                and petsnumber = #{petsnumber}
+            </if>
+            <if test="money != null">
+                and money = #{money}
+            </if>
+            <if test="creattime != null">
+                and creattime = #{creattime}
+            </if>
+            <if test="creatby != null and creatby != ''">
+                and creatby = #{creatby}
+            </if>
+            <if test="updatetime != null">
+                and updatetime = #{updatetime}
+            </if>
+            <if test="updateby != null and updateby != ''">
+                and updateby = #{updateby}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into mydatabase.customer(name, mobile, address, points, level, petsnumber, money, creattime, creatby, updatetime, updateby)
+        values (#{name}, #{mobile}, #{address}, #{points}, #{level}, #{petsnumber}, #{money}, #{creattime}, #{creatby}, #{updatetime}, #{updateby})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update mydatabase.customer
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="mobile != null and mobile != ''">
+                mobile = #{mobile},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="points != null">
+                points = #{points},
+            </if>
+            <if test="level != null">
+                level = #{level},
+            </if>
+            <if test="petsnumber != null">
+                petsnumber = #{petsnumber},
+            </if>
+            <if test="money != null">
+                money = #{money},
+            </if>
+            <if test="creattime != null">
+                creattime = #{creattime},
+            </if>
+            <if test="creatby != null and creatby != ''">
+                creatby = #{creatby},
+            </if>
+            <if test="updatetime != null">
+                updatetime = #{updatetime},
+            </if>
+            <if test="updateby != null and updateby != ''">
+                updateby = #{updateby},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from mydatabase.customer where id = #{id}
+    </delete>
+
+</mapper>

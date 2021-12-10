@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.RoleMapper">
+    <sql id="where_sql">
+        <if test="roleid != null and roleid !=''">
+            and roleid like concat('%',#{roleid},'%')
+        </if>
+        <if test="name != null and name !=''">
+            and name like concat('%',#{name},'%')
+        </if>
+    </sql>
+    <insert id="insertRole">
+        INSERT INTO ROLE(roleid,name)
+        VALUES(#{roleid},#{name})
+    </insert>
+    <update id="updateRole">
+        UPDATE ROLE SET name = #{name} where roleid = #{roleid}
+    </update>
+    <delete id="delete">
+        delete from role where roleid = #{roleid}
+    </delete>
+    <select id="getRoleList" resultType="com.bean.Role">
+        select * from role where 1=1
+        <include refid="where_sql"></include>
+        order by ${sort} ${order}
+    </select>
+    <select id="getTotalCount" resultType="java.lang.Integer">
+        select count(1) from role where 1 = 1
+        <include refid="where_sql"></include>
+    </select>
+    <select id="selectById" resultType="com.bean.Role">
+        select * from role where 1=1 and roleid = #{roleid}
+    </select>
+    <select id="getWxName" resultType="java.lang.String" parameterType="string">
+        select * from USER where openid=#{openid}
+    </select>
+</mapper>

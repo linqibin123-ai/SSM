@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.GoodsMapper">
+  <resultMap id="BaseResultMap" type="com.bean.Goods">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="mark" jdbcType="VARCHAR" property="mark" />
+    <result column="money" property="money" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="stock" jdbcType="INTEGER" property="stock" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, image, mark, money, `type`, stock, details
+  </sql>
+  <sql id="Base_Where">
+    <if test="id != null">
+      and id = #{id,jdbcType=INTEGER}
+    </if>
+    <if test="image != null">
+      and image = #{image,jdbcType=VARCHAR}
+    </if>
+    <if test="mark != null">
+      and mark = #{mark,jdbcType=VARCHAR}
+    </if>
+    <if test="type != null">
+      and type = #{type,jdbcType=VARCHAR}
+    </if>
+    <if test="stock != null">
+      and stock = #{stock,jdbcType=INTEGER}
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from goods
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectSelective" parameterType="com.bean.Goods" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goods where 1=1
+    <include refid="Base_Where"/>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from goods
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bean.Goods" useGeneratedKeys="true">
+    insert into goods (image, mark, money, 
+      `type`, stock, details)
+    values (#{image,jdbcType=VARCHAR}, #{mark,jdbcType=VARCHAR}, #{money},
+      #{type,jdbcType=VARCHAR}, #{stock,jdbcType=INTEGER}, #{details})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bean.Goods" useGeneratedKeys="true">
+    insert into goods
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="image != null">
+        image,
+      </if>
+      <if test="mark != null">
+        mark,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="stock != null">
+        stock,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="image != null">
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="mark != null">
+        #{mark,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="stock != null">
+        #{stock,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bean.Goods">
+    update goods
+    <set>
+      <if test="image != null">
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="mark != null">
+        mark = #{mark,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null">
+        money = #{money},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="stock != null">
+        stock = #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="details != null">
+        details = #{details},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bean.Goods">
+    update goods
+    set image = #{image,jdbcType=VARCHAR},
+      mark = #{mark,jdbcType=VARCHAR},
+      money = #{money,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=VARCHAR},
+      stock = #{stock,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

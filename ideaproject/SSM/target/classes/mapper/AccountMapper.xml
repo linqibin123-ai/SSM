@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.AccountMapper">
+    <insert id="insert">
+        INSERT INTO account(id,pwd,type,name,mobileno,sex,birthday,money,address)
+        VALUES(#{id},#{pwd},#{type},#{name},#{mobileno},#{sex},#{birthday},#{money},#{address})
+    </insert>
+    <insert id="insertUser">
+        INSERT INTO account(id,pwd,type)
+        VALUES(#{id},#{pwd},#{type})
+    </insert>
+    <update id="updateMoney">
+        update account
+        <set>
+            <if test="money != null">
+                money = #{money},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateUser">
+        update account
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="mobileno != null">
+                mobileno = #{mobileno,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                sex = #{sex,jdbcType=VARCHAR},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <delete id="delete">
+        delete from account where id = #{id}
+    </delete>
+    <select id="selectbyidandpwd" resultType="com.bean.Account">
+        select * from account where id = #{id} and pwd = #{pwd}
+    </select>
+    <select id="selectbyid" resultType="com.bean.Account">
+        select * from account where id = #{id}
+    </select>
+    <select id="selectbypager" resultType="com.bean.Account">
+        select * from account where 1=1
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="name != null">
+            and name = #{name}
+        </if>
+        <if test="mobileno != null">
+            and mobileno = #{mobileno}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.MenuMapper">
+    <select id="getMenuList" resultType="com.bean.Menu">
+        select * from menu
+    </select>
+    <select id="getMenuListByUserid" resultType="com.bean.Menu">
+        SELECT * FROM menu
+        WHERE 1=1 AND id IN
+        (SELECT menuid FROM roleandmenu WHERE roleid IN
+        (SELECT roleid FROM roleanduser WHERE userid = #{id})) order by id asc
+    </select>
+</mapper>

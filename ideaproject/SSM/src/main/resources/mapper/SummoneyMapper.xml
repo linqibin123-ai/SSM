@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.SummoneyMapper">
+  <resultMap id="BaseResultMap" type="com.bean.Summoney">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="accountid" jdbcType="VARCHAR" property="accountid" />
+    <result column="balance" jdbcType="DOUBLE" property="balance" />
+    <result column="change" jdbcType="DOUBLE" property="change" />
+    <result column="flag" jdbcType="INTEGER" property="flag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, accountid, balance, `change`, flag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from summoney
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPager" resultType="com.bean.Summoney">
+    select * from summoney where 1=1
+    <if test="accountid != null">
+      and accountid = #{accountid}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from summoney
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bean.Summoney" useGeneratedKeys="true">
+    insert into summoney (accountid, balance, `change`, 
+      flag)
+    values (#{accountid,jdbcType=VARCHAR}, #{balance,jdbcType=DOUBLE}, #{change,jdbcType=DOUBLE}, 
+      #{flag,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bean.Summoney" useGeneratedKeys="true">
+    insert into summoney
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="accountid != null">
+        accountid,
+      </if>
+      <if test="balance != null">
+        balance,
+      </if>
+      <if test="change != null">
+        `change`,
+      </if>
+      <if test="flag != null">
+        flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="accountid != null">
+        #{accountid,jdbcType=VARCHAR},
+      </if>
+      <if test="balance != null">
+        #{balance,jdbcType=DOUBLE},
+      </if>
+      <if test="change != null">
+        #{change,jdbcType=DOUBLE},
+      </if>
+      <if test="flag != null">
+        #{flag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bean.Summoney">
+    update summoney
+    <set>
+      <if test="accountid != null">
+        accountid = #{accountid,jdbcType=VARCHAR},
+      </if>
+      <if test="balance != null">
+        balance = #{balance,jdbcType=DOUBLE},
+      </if>
+      <if test="change != null">
+        `change` = #{change,jdbcType=DOUBLE},
+      </if>
+      <if test="flag != null">
+        flag = #{flag,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bean.Summoney">
+    update summoney
+    set accountid = #{accountid,jdbcType=VARCHAR},
+      balance = #{balance,jdbcType=DOUBLE},
+      `change` = #{change,jdbcType=DOUBLE},
+      flag = #{flag,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

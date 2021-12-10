@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.OrderMapper">
+  <resultMap id="BaseResultMap" type="com.bean.Order">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="mobileno" jdbcType="VARCHAR" property="mobileno" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="creatdate" jdbcType="TIMESTAMP" property="creatdate" />
+    <result column="updatedate" jdbcType="TIMESTAMP" property="updatedate" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="money" jdbcType="DOUBLE" property="money" />
+    <result column="goodsid" jdbcType="INTEGER" property="goodsid" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <association property="goods" column="goodsid" select="getGoods">
+    </association>
+  </resultMap>
+  <resultMap id="CountResultMap" type="com.bean.CountStatus">
+    <result column="status" property="status"></result>
+    <result column="num" property="num"></result>
+  </resultMap>
+  <select id="getGoods" parameterType="int" resultType="com.bean.Goods">
+    Select * from goods
+    where id = #{goodsid}
+  </select>
+
+  <sql id="Base_Column_List">
+    id, `name`, mobileno, address, creatdate, updatedate, `status`, money, goodsid, quantity
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from `order`
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectbypager" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from `order` where 1=1
+    <if test="name != null">
+      and name = #{name}
+    </if>
+    <if test="mobileno != null">
+      and mobileno = #{mobileno}
+    </if>
+    order by creatdate desc
+  </select>
+  <select id="getCountStatus" resultMap="CountResultMap">
+    SELECT `status` ,COUNT(*) AS num FROM `order` GROUP BY `status`
+  </select>
+  <select id="getCountMoney" resultType="com.bean.CountMoney">
+    SELECT goodsid,SUM(a.`money`) AS money FROM `order` a GROUP BY a.`goodsid` ORDER BY SUM(a.`money`) DESC LIMIT 0,10
+  </select>
+
+  <select id="getCount" resultType="com.bean.Count">
+    SELECT goodsid,SUM(quantity) AS COUNT FROM `order` a GROUP BY a.`goodsid` ORDER BY SUM(quantity) DESC LIMIT 0,10
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from `order`
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bean.Order" useGeneratedKeys="true">
+    insert into `order` (`name`, mobileno, address,
+      creatdate, updatedate, `status`, 
+      money, goodsid, quantity
+      )
+    values (#{name,jdbcType=VARCHAR}, #{mobileno,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{creatdate}, #{updatedate}, #{status,jdbcType=VARCHAR},
+      #{money,jdbcType=DOUBLE}, #{goodsid,jdbcType=INTEGER}, #{quantity,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bean.Order" useGeneratedKeys="true">
+    insert into `order`
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="mobileno != null">
+        mobileno,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="creatdate != null">
+        creatdate,
+      </if>
+      <if test="updatedate != null">
+        updatedate,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
+      <if test="goodsid != null">
+        goodsid,
+      </if>
+      <if test="quantity != null">
+        quantity,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileno != null">
+        #{mobileno,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="creatdate != null">
+        #{creatdate},
+      </if>
+      <if test="updatedate != null">
+        #{updatedate},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="goodsid != null">
+        #{goodsid,jdbcType=INTEGER},
+      </if>
+      <if test="quantity != null">
+        #{quantity,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bean.Order">
+    update `order`
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileno != null">
+        mobileno = #{mobileno,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="creatdate != null">
+        creatdate = #{creatdate},
+      </if>
+      <if test="updatedate != null">
+        updatedate = #{updatedate},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null">
+        money = #{money,jdbcType=DOUBLE},
+      </if>
+      <if test="goodsid != null">
+        goodsid = #{goodsid,jdbcType=INTEGER},
+      </if>
+      <if test="quantity != null">
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bean.Order">
+    update `order`
+    set `name` = #{name,jdbcType=VARCHAR},
+      mobileno = #{mobileno,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      creatdate = #{creatdate},
+      updatedate = #{updatedate},
+      `status` = #{status,jdbcType=VARCHAR},
+      money = #{money,jdbcType=DOUBLE},
+      goodsid = #{goodsid,jdbcType=INTEGER},
+      quantity = #{quantity,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

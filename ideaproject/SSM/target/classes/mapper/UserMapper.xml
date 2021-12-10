@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.UserMapper">
+    <sql id="where_sql">
+        <if test="id != null and id !=''">
+            and id like concat('%',#{id},'%')
+        </if>
+        <if test="name != null and name !=''">
+            and name like concat('%',#{name},'%')
+        </if>
+        <if test="department != null and department !=''">
+            and (department = #{department})
+        </if>
+    </sql>
+    <insert id="insert">
+        INSERT INTO USER(id,pwd,email,name,department,job,sex,phone,address)
+        VALUES(#{id},#{pwd},#{email},#{name},#{department},#{job},#{sex},#{phone},#{address})
+    </insert>
+    <update id="updatepwd">
+        UPDATE USER SET pwd = #{pwd} WHERE id = #{id}
+    </update>
+    <update id="updateUser">
+        UPDATE USER SET pwd = #{pwd} , NAME = #{name} , department=#{department} ,
+        job = #{job} , sex = #{sex}, phone = #{phone} , email = #{email} ,
+        address = #{address}
+        WHERE id = #{id}
+    </update>
+    <delete id="delete">
+        delete from user where id = #{id}
+    </delete>
+    <select id="selectbyidandpwd" resultType="com.bean.User">
+        select * from user where id = #{id} and pwd = #{pwd};
+    </select>
+
+    <select id="selectbyid" resultType="com.bean.User">
+        select * from user where id = #{id}
+    </select>
+    <select id="select" resultType="com.bean.User">
+        select * from user where 1=1
+        <include refid="where_sql"></include>
+        order by ${sort} ${order}
+    </select>
+    <select id="getTotalCount" resultType="java.lang.Integer">
+        select count(1) from user where 1 = 1
+        <include refid="where_sql"></include>
+    </select>
+    <select id="getRoleById" resultType="com.bean.Role">
+        select * from role where roleid = #{roleid}
+    </select>
+</mapper>
